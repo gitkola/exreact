@@ -106,14 +106,6 @@ function AudioPlayer({ tracks } = { tracks: [] }) {
         />
         <Controls
           {...{
-            // audioRef,
-            // progressBarRef,
-            // duration,
-            // setTimeProgress,
-            // tracks,
-            // trackIndex,
-            // setTrackIndex,
-            // setCurrentTrack,
             handleNext,
             isPlaying,
             muteVolume,
