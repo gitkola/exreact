@@ -1,24 +1,27 @@
+require('dotenv').config();
 const path = require('path');
 const express = require('express');
 const multer = require('multer');
-const fs = require('fs');
+const multerS3 = require('multer-s3');
+const { s3, getFileList } = require('./s3');
 
-const directoryPath = path.join(__dirname, '../uploads');
+const bucketName = process.env.AWS_BUCKET_NAME;
 
-const storage = multer.diskStorage({
-  destination(req, file, cb) {
-    cb(null, 'uploads/');
-  },
-  filename(req, file, cb) {
-    cb(null, file.originalname);
-  },
+const upload = multer({
+  storage: multerS3({
+    s3,
+    bucket: bucketName,
+    metadata(req, file, cb) {
+      cb(null, { fieldName: file.fieldname });
+    },
+    key(req, file, cb) {
+      cb(null, file.originalname);
+    },
+  }),
 });
 
-const upload = multer({ storage });
+const app = express();
 
-const app = express(); // create express app
-
-// add middlewares
 app.use(express.static(path.join(__dirname, '..', 'frontend/build')));
 app.use(express.static(path.join(__dirname, '..', 'uploads')));
 app.use(express.static('public'));
@@ -40,17 +43,9 @@ app.get('/api', (req, res) => {
   });
 });
 
-app.get('/api/playlist', (req, res) => {
-  fs.readdir(directoryPath, (err, files) => {
-    if (err) {
-      return console.log(`Unable to scan directory: ${err}`);
-    }
-    return res.json(files.map((file) => (
-      {
-        title: file,
-        src: file,
-      })));
-  });
+app.get('/api/playlist', async (req, res) => {
+  const result = await getFileList();
+  res.json(result);
 });
 
 app.get('/api/track/:trackName', (req, res) => {
@@ -58,7 +53,6 @@ app.get('/api/track/:trackName', (req, res) => {
   res.download(path.join(__dirname, `../uploads/${trackName}`));
 });
 
-// start express server on port 5000
 const PORT = 3001;
 app.listen(PORT, () => {
   console.log(`server started on port ${PORT}`);

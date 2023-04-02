@@ -2,7 +2,7 @@ import React, {
   useState,
 } from 'react';
 
-function Header() {
+function UploadBar({ onUploadSuccess }) {
   const [fileList, setFileList] = useState(null);
 
   const handleFileChange = (e) => {
@@ -24,7 +24,9 @@ function Header() {
       body: data,
     })
       .then((res) => res.json())
-      .then((value) => console.log(value))
+      .then(() => {
+        onUploadSuccess();
+      })
       .catch((err) => console.error(err));
   };
 
@@ -58,4 +60,4 @@ function Header() {
   );
 }
 
-export default Header;
+export default UploadBar;
