@@ -1,18 +1,23 @@
 import React, {
   useRef, useState, useCallback, useEffect,
 } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 
-import { PlayList } from './PlayList';
 import DisplayTrack from './DisplayTrack';
 import Controls from './Controls';
 import ProgressBar from './ProgressBar';
+import { setTrackIndex, setCurrentTrack, setIsPlaying } from '../reduxToolkit/playerSlice';
 
-function AudioPlayer({ tracks } = { tracks: [] }) {
-  const [trackIndex, setTrackIndex] = useState(0);
-  const [currentTrack, setCurrentTrack] = useState(tracks[trackIndex]);
+function AudioPlayer() {
+  const tracks = useSelector((state) => state.player.tracks);
+  const trackIndex = useSelector((state) => state.player.trackIndex);
+  const currentTrack = useSelector((state) => state.player.currentTrack);
+  const isPlaying = useSelector((state) => state.player.isPlaying);
+
+  const dispatch = useDispatch();
+
   const [timeProgress, setTimeProgress] = useState(0);
   const [duration, setDuration] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState(60);
   const [muteVolume, setMuteVolume] = useState(false);
 
@@ -21,16 +26,16 @@ function AudioPlayer({ tracks } = { tracks: [] }) {
   const playAnimationRef = useRef();
 
   const togglePlayPause = () => {
-    setIsPlaying((prev) => !prev);
+    dispatch(setIsPlaying(!isPlaying));
   };
 
   const handleNext = () => {
     if (trackIndex >= tracks.length - 1) {
-      setTrackIndex(0);
-      setCurrentTrack(tracks[0]);
+      dispatch(setTrackIndex(0));
+      dispatch(setCurrentTrack(tracks[0]));
     } else {
-      setTrackIndex((prev) => prev + 1);
-      setCurrentTrack(tracks[trackIndex + 1]);
+      dispatch(setTrackIndex(trackIndex + 1));
+      dispatch(setCurrentTrack(tracks[trackIndex + 1]));
     }
   };
 
@@ -74,11 +79,11 @@ function AudioPlayer({ tracks } = { tracks: [] }) {
   const handlePrevious = () => {
     if (trackIndex === 0) {
       const lastTrackIndex = tracks.length - 1;
-      setTrackIndex(lastTrackIndex);
-      setCurrentTrack(tracks[lastTrackIndex]);
+      dispatch(setTrackIndex(lastTrackIndex));
+      dispatch(setCurrentTrack(tracks[lastTrackIndex]));
     } else {
-      setTrackIndex((prev) => prev - 1);
-      setCurrentTrack(tracks[trackIndex - 1]);
+      dispatch(setTrackIndex(trackIndex - 1));
+      dispatch(setCurrentTrack(tracks[trackIndex - 1]));
     }
   };
 
@@ -121,18 +126,6 @@ function AudioPlayer({ tracks } = { tracks: [] }) {
         <ProgressBar
           {...{
             progressBarRef, audioRef, timeProgress, duration,
-          }}
-        />
-        <PlayList
-          tracks={tracks}
-          onTrackClick={(idx) => {
-            setTrackIndex(idx);
-            setCurrentTrack(tracks[idx]);
-          }}
-          {...{
-            trackIndex,
-            isPlaying,
-            togglePlayPause,
           }}
         />
       </div>

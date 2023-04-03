@@ -1,63 +1,57 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import AudioPlayer from './AudioPlayer';
 import UploadBar from './UploadBar';
-// import { PlayList } from './PlayList';
+import {
+  loadTracks, setTrackIndex, setCurrentTrack, setIsPlaying,
+} from '../reduxToolkit/playerSlice';
+import { PlayList } from './PlayList';
 
 function Content() {
-  const [isLoading, setIsLoading] = useState(false);
-  const [tracks, setTracks] = useState(null);
-
-  async function fetchData() {
-    try {
-      const response = await axios.get('/api/playlist');
-      setTracks(response.data);
-      setIsLoading(false);
-    } catch (error) {
-      console.log(`fetchData ERROR: ${error}`);
-      setIsLoading(false);
-    }
-  }
+  const tracks = useSelector((state) => state.player.tracks);
+  const trackIndex = useSelector((state) => state.player.trackIndex);
+  const isLoading = useSelector((state) => state.player.isLoading);
+  const isPlaying = useSelector((state) => state.player.isPlaying);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    setIsLoading(true);
-    fetchData();
+    dispatch(loadTracks());
   }, []);
 
   if (isLoading) return (<div>Loading...</div>);
-  // return (
-  //   <div className="container">
-  //     <div className="header">
-  //       <UploadBar onUploadSuccess={() => { fetchData(); }} />
-  //       <AudioPlayer tracks={tracks || []} />
-  //     </div>
-  //     <div className="content">
-  //       <PlayList
-  //         tracks={tracks}
-  //         // onTrackClick={(idx) => {
-  //         //   // setTrackIndex(idx);
-  //         //   // setCurrentTrack(tracks[idx]);
-  //         // }}
-  //         // {...{
-  //         //   trackIndex,
-  //         //   isPlaying,
-  //         //   togglePlayPause,
-  //         // }}
-  //       />
-  //     </div>
-  //   </div>
-  // );
   return (
-    <div className="fullscreen">
+    <div className="container">
       <div className="header">
-        <UploadBar onUploadSuccess={() => { fetchData(); }} />
-      </div>
-      <div className="main">
+        <UploadBar onUploadSuccess={() => { dispatch(loadTracks()); }} />
         <AudioPlayer tracks={tracks || []} />
       </div>
-      <div className="footer" />
+      <div className="content">
+        <PlayList
+          tracks={tracks}
+          onTrackClick={(idx) => {
+            dispatch(setTrackIndex(idx));
+            dispatch(setCurrentTrack(tracks[idx]));
+          }}
+          {...{
+            trackIndex,
+            isPlaying,
+            togglePlayPause: () => dispatch(setIsPlaying(!isPlaying)),
+          }}
+        />
+      </div>
     </div>
   );
+  // return (
+  //   <div className="fullscreen">
+  //     <div className="header">
+  //       <UploadBar onUploadSuccess={() => { dispatch(loadTracks()); }} />
+  //     </div>
+  //     <div className="main">
+  //       <AudioPlayer tracks={tracks || []} />
+  //     </div>
+  //     <div className="footer" />
+  //   </div>
+  // );
 }
 
 export default Content;
