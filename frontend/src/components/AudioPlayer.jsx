@@ -11,7 +11,7 @@ import { setTrackIndex, setCurrentTrack, setIsPlaying } from '../reduxToolkit/pl
 function AudioPlayer() {
   const tracks = useSelector((state) => state.player.tracks);
   const trackIndex = useSelector((state) => state.player.trackIndex);
-  const currentTrack = useSelector((state) => state.player.currentTrack);
+  const currentTrack = useSelector((state) => state.player.currentTrack) || tracks[0];
   const isPlaying = useSelector((state) => state.player.isPlaying);
 
   const dispatch = useDispatch();
