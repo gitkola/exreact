@@ -1,15 +1,45 @@
 * {
+  margin: 0;
+  padding: 0;
   box-sizing: border-box;
 }
 
 body {
   font-family: sans-serif;
   background: lightyellow;
-  margin: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.fullscreen {
+  background: cyan;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  height: 150px;
+  background: red;
+  position: sticky;
+  top: 0;
+}
+
+.main {
+  flex: 1;
+  background: green;
+}
+
+.footer {
+  height: 50px;
+  background: yellow;
 }
 
 .audio-player {
-  background: lightyellow;
+  background: rgb(185, 185, 152);
+  height: 100%;
+
 }
 
 .inner {
@@ -32,7 +62,7 @@ body {
 .title {
   color: #000;
   font-weight: 100;
-  font-size: 32px;
+  font-size: 24px;
   margin-bottom: 0;
   padding: 2px;
   line-height: 37px;

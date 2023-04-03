@@ -12,7 +12,6 @@ export function PlayList({
   return (
     <div
       style={{
-        height: 350,
         overflowY: 'scroll',
         borderTop: 1,
         borderTopStyle: 'solid',
