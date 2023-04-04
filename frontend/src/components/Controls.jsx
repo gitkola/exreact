@@ -1,5 +1,5 @@
-// icons
-import React, {
+import React from 'react';
+import {
   IoPlaySkipBackSharp,
   IoPlaySkipForwardSharp,
   IoPlaySharp,

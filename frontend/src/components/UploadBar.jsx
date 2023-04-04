@@ -1,6 +1,7 @@
 import React, {
   useState,
 } from 'react';
+import { IoCloudUpload } from 'react-icons/io5';
 
 function UploadBar({ onUploadSuccess }) {
   const [fileList, setFileList] = useState(null);
@@ -37,25 +38,30 @@ function UploadBar({ onUploadSuccess }) {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      borderWidth: 1,
-      borderStyle: 'solid',
+      flexDirection: 'column',
     }}
     >
-      <input type="file" onChange={handleFileChange} multiple accept="audio/mpeg, audio/wav" />
-
+      <label htmlFor="upload" className="custom-file-upload">
+        <input
+          id="upload"
+          type="file"
+          onChange={handleFileChange}
+          multiple
+          accept="audio/mpeg, audio/wav"
+        />
+        <IoCloudUpload size={24} color="gray" />
+      </label>
       <ul>
         {files.map((file) => (
           <li key={file.name}>
             {file.name}
-            {' '}
-            -
-            {' '}
-            {file.type}
           </li>
         ))}
       </ul>
+      {
+        fileList ? <button onClick={handleUploadClick} type="button">Upload</button> : null
+      }
 
-      <button onClick={handleUploadClick} type="button">Upload</button>
     </div>
   );
 }
