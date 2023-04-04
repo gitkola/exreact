@@ -1,4 +1,5 @@
 import React from 'react';
+import { IoCloudDownload } from 'react-icons/io5';
 import { PlayControl } from './PlayControl';
 
 // eslint-disable-next-line import/prefer-default-export
@@ -12,76 +13,96 @@ export function PlayList({
   return (
     <div className="inner">
       {Array.isArray(tracks) ? tracks.map((track, idx) => (
-        // eslint-disable-next-line max-len
-        // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
         <div
           key={track.src}
-          onClick={() => {
-            onTrackClick(idx);
-          }}
           style={{
             display: 'flex',
             flexDirection: 'row',
             borderBottom: 1,
             borderBottomStyle: 'solid',
             borderColor: 'lightgray',
+            alignItems: 'center',
+            justifyContent: 'space-between',
           }}
         >
-          <div style={{
-            display: 'flex',
-            flexDirection: 'row',
-            alignItems: 'center',
-          }}
+          {/* eslint-disable-next-line max-len */}
+          {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
+          <div
+            onClick={() => {
+              onTrackClick(idx);
+            }}
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              alignItems: 'center',
+              width: '100%',
+            }}
           >
-            <div>
-              {idx < 9 ? `0${idx + 1}` : idx + 1}
-            </div>
-            <div
-              style={{
-                backgroundImage: `url(${track.thumbnail})`,
-                backgroundPosition: 'center',
-                backgroundSize: 'cover',
-                backgroundRepeat: 'no-repeat',
-                width: 60,
-                height: 60,
-                alignItems: 'center',
-                justifyContent: 'center',
-                display: 'flex',
-              }}
+            <div style={{
+              display: 'flex',
+              flexDirection: 'row',
+              alignItems: 'center',
+            }}
             >
+              <div>
+                {idx < 9 ? `0${idx + 1}` : idx + 1}
+              </div>
               <div
                 style={{
-                  width: '50px',
-                  height: '50px',
+                  backgroundImage: `url(${track.thumbnail})`,
+                  backgroundPosition: 'center',
+                  backgroundSize: 'cover',
+                  backgroundRepeat: 'no-repeat',
+                  width: 60,
+                  height: 60,
                   alignItems: 'center',
                   justifyContent: 'center',
                   display: 'flex',
                 }}
               >
-                <PlayControl
-                  {...{
-                    isPlaying: isPlaying && trackIndex === idx,
-                    togglePlayPause:
+                <div
+                  style={{
+                    width: '50px',
+                    height: '50px',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    display: 'flex',
+                  }}
+                >
+                  <PlayControl
+                    {...{
+                      isPlaying: isPlaying && trackIndex === idx,
+                      togglePlayPause:
                       // eslint-disable-next-line no-nested-ternary
                       trackIndex === idx && isPlaying
                         ? togglePlayPause
                         : !isPlaying
                           ? togglePlayPause
                           : () => {},
-                  }}
-                />
+                    }}
+                  />
+                </div>
               </div>
             </div>
+            <div
+              style={{
+                justifyContent: 'center',
+                display: 'flex',
+                flexDirection: 'column',
+              }}
+            >
+              {track.title}
+            </div>
           </div>
-          <div
-            style={{
-              justifyContent: 'center',
-              display: 'flex',
-              flexDirection: 'column',
-            }}
+          <div style={{
+            width: 50,
+            display: 'flex',
+            justifyContent: 'center',
+          }}
           >
-            <div style={{ color: 'gray' }}>{track.author}</div>
-            {track.title}
+            <a href={track.src} download>
+              <IoCloudDownload size={24} color="gray" />
+            </a>
           </div>
         </div>
       )) : null}
