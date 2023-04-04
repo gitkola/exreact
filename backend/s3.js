@@ -28,15 +28,17 @@ async function getFileList() {
   const command = new ListObjectsV2Command(input);
   const response = await s3.send(command);
 
-  const results = await Promise.all(response.Contents.map(async ({ Key }) => {
+  const results = await Promise.all(response.Contents.map(async ({ Key, LastModified, Size }) => {
     const src = await createPresignedUrlWithClient({
       client: s3,
       bucket: bucketName,
       key: Key,
     });
-    return { title: Key, src };
+    return {
+      title: Key, src, LastModified, Size,
+    };
   }));
-  return results;
+  return results.sort((a, b) => a.LastModified - b.LastModified);
 }
 
 module.exports = {
