@@ -10,34 +10,32 @@ export function PlayList({
   togglePlayPause,
 }) {
   return (
-    <div
-      style={{
-        overflowY: 'scroll',
-        borderTop: 1,
-        borderTopStyle: 'solid',
-        borderTopColor: 'lightgray',
-        borderBottom: 1,
-        borderBottomStyle: 'solid',
-        borderBottomColor: 'lightgray',
-      }}
-    >
+    <div className="inner">
       {Array.isArray(tracks) ? tracks.map((track, idx) => (
         // eslint-disable-next-line max-len
         // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
         <div
           key={track.src}
-          className="audio-info"
           onClick={() => {
             onTrackClick(idx);
           }}
           style={{
+            display: 'flex',
             flexDirection: 'row',
             borderBottom: 1,
             borderBottomStyle: 'solid',
             borderColor: 'lightgray',
           }}
         >
-          <div style={{ background: 'lightgray' }}>
+          <div style={{
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+          }}
+          >
+            <div>
+              {idx < 9 ? `0${idx + 1}` : idx + 1}
+            </div>
             <div
               style={{
                 backgroundImage: `url(${track.thumbnail})`,

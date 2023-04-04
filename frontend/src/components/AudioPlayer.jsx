@@ -95,7 +95,7 @@ function AudioPlayer() {
   }, [volume, audioRef, muteVolume]);
 
   return (
-    <div className="audio-player">
+    <div>
       {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
       <audio
         src={currentTrack?.src}

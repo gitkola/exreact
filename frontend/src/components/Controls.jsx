@@ -22,23 +22,23 @@ function Controls({
     <div className="controls-wrapper">
       <div className="controls">
         <button type="button" onClick={handlePrevious}>
-          <IoPlaySkipBackSharp color="gray" />
+          <IoPlaySkipBackSharp color="gray" size={48} />
         </button>
         {/* <button onClick={skipBackward}>
           <IoPlayBackSharp />
         </button> */}
         <button type="button" onClick={togglePlayPause}>
           {isPlaying ? (
-            <IoPauseSharp color="gray" />
+            <IoPauseSharp color="gray" size={48} />
           ) : (
-            <IoPlaySharp color="gray" />
+            <IoPlaySharp color="gray" size={48} />
           )}
         </button>
         {/* <button onClick={skipForward}>
           <IoPlayForwardSharp />
         </button> */}
         <button type="button" onClick={handleNext}>
-          <IoPlaySkipForwardSharp color="gray" />
+          <IoPlaySkipForwardSharp color="gray" size={48} />
         </button>
       </div>
       <div className="volume">
