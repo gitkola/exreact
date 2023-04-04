@@ -41,7 +41,7 @@ function UploadBar({ onUploadSuccess }) {
       borderStyle: 'solid',
     }}
     >
-      <input type="file" onChange={handleFileChange} multiple accept="audio/mpeg" />
+      <input type="file" onChange={handleFileChange} multiple accept="audio/mpeg, audio/wav" />
 
       <ul>
         {files.map((file) => (
