@@ -1,9 +1,11 @@
 require('dotenv').config();
+require('./db');
 const path = require('path');
 const express = require('express');
 const multer = require('multer');
 const multerS3 = require('multer-s3');
 const { s3, getFileList } = require('./s3');
+const userRouter = require('./routes/user');
 
 const bucketName = process.env.AWS_BUCKET_NAME;
 
@@ -27,6 +29,8 @@ app.use(express.static(path.join(__dirname, '..', 'uploads')));
 app.use(express.static('public'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+app.use('/user', userRouter);
 
 function uploadFiles(req, res) {
   res.json({ message: 'Successfully uploaded files' });
