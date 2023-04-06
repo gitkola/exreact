@@ -2,6 +2,7 @@ import React, {
   useState,
 } from 'react';
 import { IoCloudUpload } from 'react-icons/io5';
+import axios from 'axios';
 
 function UploadBar({ onUploadSuccess }) {
   const [fileList, setFileList] = useState(null);
@@ -10,7 +11,7 @@ function UploadBar({ onUploadSuccess }) {
     setFileList(e.target.files);
   };
 
-  const handleUploadClick = () => {
+  const handleUploadClick = async () => {
     if (!fileList) {
       return;
     }
@@ -20,15 +21,12 @@ function UploadBar({ onUploadSuccess }) {
       data.append('files', file, file.name);
     });
 
-    fetch('/upload_files', {
-      method: 'POST',
-      body: data,
-    })
-      .then((res) => res.json())
-      .then(() => {
-        onUploadSuccess();
-      })
-      .catch((err) => console.error(err));
+    try {
+      await axios.post('/api/upload', data);
+      onUploadSuccess();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const files = fileList ? [...fileList] : [];
