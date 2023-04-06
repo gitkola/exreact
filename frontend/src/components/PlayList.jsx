@@ -10,6 +10,7 @@ export function PlayList({
   isPlaying,
   togglePlayPause,
 }) {
+  console.log(tracks);
   return (
     <div className="inner">
       {Array.isArray(tracks) ? tracks.map((track, idx) => (
@@ -84,14 +85,24 @@ export function PlayList({
                 </div>
               </div>
             </div>
-            <div
-              style={{
-                justifyContent: 'center',
-                display: 'flex',
-                flexDirection: 'column',
-              }}
-            >
-              {track.title}
+            <div>
+              <div
+                style={{
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  width: 250,
+                }}
+              >
+                {track.title}
+              </div>
+              <div
+                style={{
+                  fontSize: 12,
+                  color: 'gray',
+                }}
+              >
+                {track.LastModified}
+              </div>
             </div>
           </div>
           <div style={{
