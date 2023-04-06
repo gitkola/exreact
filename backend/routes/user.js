@@ -1,86 +1,11 @@
 const router = require('express').Router();
 const bcrypt = require('bcrypt');
-const nodemailer = require('nodemailer');
 const { v4: uuidv4 } = require('uuid');
 const path = require('path');
 const User = require('../models/User');
 const UserVerification = require('../models/UserVerification');
 const createToken = require('../utils/createToken');
-
-const transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: process.env.AUTH_EMAIL,
-    pass: process.env.AUTH_PASS,
-  },
-});
-
-transporter.verify((error, success) => {
-  if (error) {
-    console.log('Error verify transporter', error);
-  } else {
-    console.log('Verify transporter success', success);
-  }
-});
-
-const sendVerificationEmail = ({ _id, email }, res) => {
-  const currentUrl = process.env.APP_URL;
-  const uniqueString = uuidv4() + _id;
-  const mailOptions = {
-    from: process.env.AUTH_EMAIL,
-    to: email,
-    subject: 'Verify your email',
-    html: `
-      <p>Verify your email to complete signup.</p>
-      <p>This link <b>expires in 6 hours</b>.</p>
-      <p>Press <a href=${`${currentUrl}user/verify/${_id}/${uniqueString}`}>here</a> to proceed.</p>
-    `,
-  };
-
-  bcrypt
-    .hash(uniqueString, 10)
-    .then((hashedUniqueString) => {
-      const newVerification = new UserVerification({
-        userId: _id,
-        uniqueString: hashedUniqueString,
-        createdAt: Date.now(),
-        expiresAt: Date.now() + 21600000,
-      });
-
-      newVerification
-        .save()
-        .then(() => {
-          transporter
-            .sendMail(mailOptions)
-            .then(() => {
-              res.json({
-                error: false,
-                message: 'Verification email sent.',
-              });
-            })
-            .catch((error) => {
-              console.log(error);
-              res.json({
-                error,
-                message: 'An error occured while sending verification code!',
-              });
-            });
-        })
-        .catch((error) => {
-          console.log(error);
-          res.json({
-            error,
-            message: 'An error occured while saving verification code!',
-          });
-        });
-    })
-    .catch((error) => {
-      res.json({
-        error,
-        message: 'An error occured while hashing verification code!',
-      });
-    });
-};
+const { sendVerificationEmail } = require('../utils/sendEmail');
 
 router.post('/signup', (req, res) => {
   let { email, password } = req.body;
@@ -115,13 +40,49 @@ router.post('/signup', (req, res) => {
             password: hashedPassword,
             verified: false,
           });
-          newUser.save().then((data) => {
-            sendVerificationEmail(data, res);
-            res.json({
-              error: false,
-              message: 'New user successfully created',
-              data,
-            });
+          newUser.save().then(({ _id }) => {
+            const uniqueString = uuidv4() + _id;
+            bcrypt
+              .hash(uniqueString, 10)
+              .then((hashedUniqueString) => {
+                const newVerification = new UserVerification({
+                  userId: _id,
+                  uniqueString: hashedUniqueString,
+                  createdAt: Date.now(),
+                  expiresAt: Date.now() + 21600000,
+                });
+
+                newVerification
+                  .save()
+                  .then(async () => {
+                    try {
+                      await sendVerificationEmail({ _id, email, uniqueString });
+                      res.json({
+                        error: false,
+                        message: 'Verification email sent.',
+                      });
+                    } catch (error) {
+                      console.log(error);
+                      res.json({
+                        error,
+                        message: 'An error occured while sending verification code!',
+                      });
+                    }
+                  })
+                  .catch((error) => {
+                    console.log(error);
+                    res.json({
+                      error,
+                      message: 'An error occured while saving verification code!',
+                    });
+                  });
+              })
+              .catch((error) => {
+                res.json({
+                  error,
+                  message: 'An error occured while hashing verification code!',
+                });
+              });
           }).catch((error) => {
             console.log(error);
             res.json({
