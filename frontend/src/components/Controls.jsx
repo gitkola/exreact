@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import React from 'react';
 import {
   IoPlaySkipBackSharp,
@@ -7,6 +8,9 @@ import {
 } from 'react-icons/io5';
 
 import { IoMdVolumeHigh, IoMdVolumeOff, IoMdVolumeLow } from 'react-icons/io';
+
+const buttonSize = 36;
+const buttonColor = '#cecece';
 
 function Controls({
   handleNext,
@@ -22,34 +26,33 @@ function Controls({
     <div className="controls-wrapper">
       <div className="controls">
         <button type="button" onClick={handlePrevious}>
-          <IoPlaySkipBackSharp color="gray" size={48} />
+          <IoPlaySkipBackSharp color={buttonColor} size={buttonSize} />
         </button>
         {/* <button onClick={skipBackward}>
           <IoPlayBackSharp />
         </button> */}
         <button type="button" onClick={togglePlayPause}>
           {isPlaying ? (
-            <IoPauseSharp color="gray" size={48} />
+            <IoPauseSharp color={buttonColor} size={buttonSize} />
           ) : (
-            <IoPlaySharp color="gray" size={48} />
+            <IoPlaySharp color={buttonColor} size={buttonSize} />
           )}
         </button>
         {/* <button onClick={skipForward}>
           <IoPlayForwardSharp />
         </button> */}
         <button type="button" onClick={handleNext}>
-          <IoPlaySkipForwardSharp color="gray" size={48} />
+          <IoPlaySkipForwardSharp color={buttonColor} size={buttonSize} />
         </button>
       </div>
       <div className="volume">
         <button type="button" onClick={onClickMute}>
-          {/* eslint-disable-next-line no-nested-ternary */}
           {muteVolume || volume < 5 ? (
-            <IoMdVolumeOff color="gray" />
+            <IoMdVolumeOff color={buttonColor} />
           ) : volume < 40 ? (
-            <IoMdVolumeLow color="gray" />
+            <IoMdVolumeLow color={buttonColor} />
           ) : (
-            <IoMdVolumeHigh color="gray" />
+            <IoMdVolumeHigh color={buttonColor} />
           )}
         </button>
         <input

@@ -1,6 +1,8 @@
 import React from 'react';
 import { IoPlaySharp, IoPauseSharp } from 'react-icons/io5';
 
+const buttonColor = '#cecece';
+
 // eslint-disable-next-line import/prefer-default-export
 export function PlayControl({ isPlaying, togglePlayPause }) {
   return (
@@ -9,7 +11,7 @@ export function PlayControl({ isPlaying, togglePlayPause }) {
     <div
       onClick={togglePlayPause}
       style={{
-        borderWidth: 1,
+        borderWidth: 2,
         borderColor: 'gray',
         borderStyle: 'solid',
         alignItems: 'center',
@@ -17,14 +19,14 @@ export function PlayControl({ isPlaying, togglePlayPause }) {
         borderRadius: 20,
         width: 40,
         height: 40,
-        background: 'white',
+        background: 'transparent',
         display: 'flex',
       }}
     >
       {isPlaying ? (
-        <IoPauseSharp size={20} color="gray" />
+        <IoPauseSharp size={20} color={buttonColor} />
       ) : (
-        <IoPlaySharp size={20} color="gray" />
+        <IoPlaySharp size={20} color={buttonColor} />
       )}
     </div>
   );

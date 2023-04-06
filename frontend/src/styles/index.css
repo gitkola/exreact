@@ -6,10 +6,12 @@
 
 body {
   font-family: sans-serif;
+  background: #000000;
+  color: #cecece;
 }
 
 .header {
-  background: lightgray;
+  /* background: #000000; */
   position: sticky;
   top: 0;
 }
@@ -29,7 +31,7 @@ body {
 }
 
 .title {
-  color: gray;
+  color: #cecece;
   font-weight: 100;
   font-size: 24px;
   margin-bottom: 0;
@@ -73,7 +75,7 @@ button svg {
 }
 
 .time {
-  color: #333;
+  color: #ccc;
   font-size: 13px;
   line-height: 46px;
 }

@@ -18,7 +18,7 @@ function AudioPlayer() {
 
   const [timeProgress, setTimeProgress] = useState(0);
   const [duration, setDuration] = useState(0);
-  const [volume, setVolume] = useState(60);
+  const [volume, setVolume] = useState(100);
   const [muteVolume, setMuteVolume] = useState(false);
 
   const audioRef = useRef();
