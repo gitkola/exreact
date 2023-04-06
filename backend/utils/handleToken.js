@@ -7,4 +7,13 @@ const createToken = async (tokenData, tokenKey = TOKEN_KEY, expiresIn = TOKEN_EX
   return token;
 };
 
-module.exports = createToken;
+const verifyToken = async (token, tokenKey = TOKEN_KEY) => {
+  try {
+    const decodedToken = await jwt.verify(token, tokenKey);
+    return decodedToken;
+  } catch (error) {
+    throw new Error('Invalid token');
+  }
+};
+
+module.exports = { createToken, verifyToken };

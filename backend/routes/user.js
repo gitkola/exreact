@@ -4,7 +4,7 @@ const { v4: uuidv4 } = require('uuid');
 const path = require('path');
 const User = require('../models/User');
 const UserVerification = require('../models/UserVerification');
-const createToken = require('../utils/createToken');
+const { createToken } = require('../utils/handleToken');
 const { sendVerificationEmail } = require('../utils/sendEmail');
 
 router.post('/signup', (req, res) => {
