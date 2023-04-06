@@ -26,17 +26,14 @@ const upload = multer({
 const app = express();
 
 app.use(express.static(path.join(__dirname, '..', 'frontend/build')));
-app.use(express.static(path.join(__dirname, '..', 'uploads')));
-app.use(express.static('public'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use('/user', userRouter);
 
-function uploadFiles(req, res) {
+app.post('/upload_files', upload.array('files'), (req, res) => {
   res.json({ message: 'Successfully uploaded files' });
-}
-app.post('/upload_files', upload.array('files'), uploadFiles);
+});
 
 app.get('/status', (req, res) => {
   res.status(200).end('OK');
