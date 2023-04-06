@@ -6,6 +6,7 @@ import Content from './components/Content';
 // css
 import './styles/index.css';
 import './styles/customize-progress-bar.css';
+import './fonts/Oxanium-VariableFont_wght.ttf';
 import store from './reduxToolkit';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

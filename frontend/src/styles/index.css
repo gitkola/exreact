@@ -5,7 +5,7 @@
 }
 
 body {
-  font-family: sans-serif;
+  font-family: "Light";
   background: #000000;
   color: #cecece;
 }
@@ -95,4 +95,10 @@ input[type="file"] {
   margin: 20px;
   background-color: white;
   align-items: center;
+}
+
+@font-face {
+  font-family: "Light";   /*Can be any text*/
+  src: local("Oxanium-VariableFont_wght"),
+    url("../fonts/Oxanium-VariableFont_wght.ttf") format("truetype");
 }
