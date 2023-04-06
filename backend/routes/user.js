@@ -86,68 +86,42 @@ router.get('/verified', (req, res) => {
   res.sendFile(path.join(__dirname, '../views/verified.html'));
 });
 
-router.post('/signin', (req, res) => {
-  let { email, password } = req.body;
-  email = email.trim();
-  password = password.trim();
-  if (email === '' || password === '') {
-    res.json({
-      error: true,
-      message: 'Empty input fields!',
-    });
-  } else {
-    User.find({ email })
-      .then((data) => {
-        if (data.length) {
-          if (!data[0].verified) {
+router.post('/signin', async (req, res) => {
+  try {
+    let { email, password } = req.body;
+    email = email.trim();
+    password = password.trim();
+    if (email === '' || password === '') {
+      throw new Error('Empty input fields!');
+    } else {
+      const data = await User.find({ email });
+      if (data.length) {
+        const { verified, _id } = data[0];
+        if (!verified) {
+          throw new Error("Email hasn't been verified yet. Please check your email inbox.");
+        } else {
+          const hashedPassword = data[0].password;
+          const result = await bcrypt.compare(password, hashedPassword);
+          if (result) {
+            const tokenData = { userId: _id, email };
+            const token = await createToken(tokenData);
+            const user = { _id, email, token };
             res.json({
-              error: true,
-              message: "Email hasn't been verified yet. Please check your email inbox.",
+              error: false,
+              message: 'Signin successful',
+              user,
             });
           } else {
-            const hashedPassword = data[0].password;
-            bcrypt.compare(password, hashedPassword)
-              .then(async (result) => {
-                if (result) {
-                  // eslint-disable-next-line no-underscore-dangle
-                  const tokenData = { userId: data[0]._id, email };
-                  const token = await createToken(tokenData);
-                  // eslint-disable-next-line no-underscore-dangle
-                  const user = { _id: data[0]._id, email, token };
-                  res.json({
-                    error: false,
-                    message: 'Signin successful',
-                    user,
-                  });
-                } else {
-                  res.json({
-                    error: true,
-                    message: 'Wrong email or password!',
-                  });
-                }
-              })
-              .catch((error) => {
-                console.log(error);
-                res.json({
-                  error,
-                  message: 'An error occured while comparing passwords!',
-                });
-              });
+            throw new Error('Wrong email or password!');
           }
-        } else {
-          res.json({
-            error: true,
-            message: 'Wrong email!',
-          });
         }
-      })
-      .catch((error) => {
-        console.log(error);
-        res.json({
-          error,
-          message: 'An error occured while finding user!',
-        });
-      });
+      } else {
+        throw new Error('Wrong email!');
+      }
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(400).send(error.message);
   }
 });
 
