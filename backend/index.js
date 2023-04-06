@@ -39,12 +39,6 @@ app.get('/status', (req, res) => {
   res.status(200).end('OK');
 });
 
-app.get('/api', (req, res) => {
-  res.json({
-    message: 'success',
-  });
-});
-
 app.get('/api/playlist', async (req, res) => {
   const result = await getFileList();
   res.json(result);
