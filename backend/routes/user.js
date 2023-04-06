@@ -5,6 +5,7 @@ const { v4: uuidv4 } = require('uuid');
 const path = require('path');
 const User = require('../models/User');
 const UserVerification = require('../models/UserVerification');
+const createToken = require('../utils/createToken');
 
 const transporter = nodemailer.createTransport({
   service: 'gmail',
@@ -115,12 +116,12 @@ router.post('/signup', (req, res) => {
             verified: false,
           });
           newUser.save().then((data) => {
-            // res.json({
-            //   error: false,
-            //   message: 'New user successfully created',
-            //   data,
-            // });
             sendVerificationEmail(data, res);
+            res.json({
+              error: false,
+              message: 'New user successfully created',
+              data,
+            });
           }).catch((error) => {
             console.log(error);
             res.json({
@@ -246,12 +247,17 @@ router.post('/signin', (req, res) => {
           } else {
             const hashedPassword = data[0].password;
             bcrypt.compare(password, hashedPassword)
-              .then((result) => {
+              .then(async (result) => {
                 if (result) {
+                  // eslint-disable-next-line no-underscore-dangle
+                  const tokenData = { userId: data[0]._id, email };
+                  const token = await createToken(tokenData);
+                  // eslint-disable-next-line no-underscore-dangle
+                  const user = { _id: data[0]._id, email, token };
                   res.json({
                     error: false,
                     message: 'Signin successful',
-                    data,
+                    user,
                   });
                 } else {
                   res.json({

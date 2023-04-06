@@ -6,6 +6,7 @@ const multer = require('multer');
 const multerS3 = require('multer-s3');
 const { s3, getFileList } = require('./s3');
 const userRouter = require('./routes/user');
+const auth = require('./middleware/auth');
 
 const bucketName = process.env.AWS_BUCKET_NAME;
 
@@ -55,6 +56,10 @@ app.get('/api/playlist', async (req, res) => {
 app.get('/api/track/:trackName', (req, res) => {
   const trackName = req.params;
   res.download(path.join(__dirname, `../uploads/${trackName}`));
+});
+
+app.get('/auth_route', auth, (req, res) => {
+  res.status(200).send(`Auth request. User email: ${req.user.email}, userId: ${req.user.userId}`);
 });
 
 const PORT = 3001;
