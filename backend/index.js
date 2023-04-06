@@ -50,11 +50,6 @@ app.get('/api/playlist', async (req, res) => {
   res.json(result);
 });
 
-app.get('/api/track/:trackName', (req, res) => {
-  const trackName = req.params;
-  res.download(path.join(__dirname, `../uploads/${trackName}`));
-});
-
 app.get('/auth_route', auth, (req, res) => {
   res.status(200).send(`Auth request. User email: ${req.user.email}, userId: ${req.user.userId}`);
 });
