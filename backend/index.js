@@ -1,15 +1,18 @@
 require('dotenv').config();
-require('./backend/db');
+require('./db');
 const path = require('path');
 const express = require('express');
-const authRouter = require('./backend/routes/auth');
-const uploadRouter = require('./backend/routes/upload');
-const playlistRouter = require('./backend/routes/playlist');
-const auth = require('./backend/middleware/auth');
+const cors = require('cors');
+
+const authRouter = require('./routes/auth');
+const uploadRouter = require('./routes/upload');
+const playlistRouter = require('./routes/playlist');
+const auth = require('./middleware/auth');
 
 const app = express();
 
-app.use(express.static(path.resolve(__dirname, './frontend/build')));
+app.use(express.static(path.resolve(__dirname, '../frontend/build')));
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -17,15 +20,15 @@ app.use('/api/auth', authRouter);
 app.use('/api/upload', uploadRouter);
 app.use('/api/playlist', playlistRouter);
 
-app.get('/status', (req, res) => {
+app.get('/api/status', (req, res) => {
   res.status(200).end('OK');
 });
 
-app.get('*', (req, res) => {
-  res.sendFile(path.resolve(__dirname, './frontend/build', 'index.html'));
-});
+// app.get('*', (req, res) => {
+//   res.sendFile(path.resolve(__dirname, '../frontend/build', 'index.html'));
+// });
 
-app.get('/auth_route', auth, (req, res) => {
+app.get('/api/auth_route', auth, (req, res) => {
   res.status(200).send(`Auth request. User email: ${req.user.email}, userId: ${req.user.userId}`);
 });
 
