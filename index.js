@@ -9,13 +9,17 @@ const auth = require('./backend/middleware/auth');
 
 const app = express();
 
-app.use(express.static(path.join(__dirname, '..', 'frontend/build')));
+app.use(express.static(path.join(__dirname, '..', './frontend/build')));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use('/api/auth', authRouter);
 app.use('/api/upload', uploadRouter);
 app.use('/api/playlist', playlistRouter);
+
+app.get('*', (req, res) => {
+  res.sendFile(path.resolve(__dirname, './frontend/build', 'index.html'));
+});
 
 app.get('/status', (req, res) => {
   res.status(200).end('OK');
