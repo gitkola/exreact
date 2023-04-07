@@ -12,5 +12,6 @@
       "dest": "/"
     }
   ],
-  "outputDirectory": "./frontend/build"
+  "outputDirectory": "./frontend/build",
+  "installCommand": "npm install && cd ./frontend && npm install"
 }
