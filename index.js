@@ -1,11 +1,11 @@
 require('dotenv').config();
-require('./db');
+require('./backend/db');
 const path = require('path');
 const express = require('express');
-const authRouter = require('./routes/auth');
-const uploadRouter = require('./routes/upload');
-const playlistRouter = require('./routes/playlist');
-const auth = require('./middleware/auth');
+const authRouter = require('./backend/routes/auth');
+const uploadRouter = require('./backend/routes/upload');
+const playlistRouter = require('./backend/routes/playlist');
+const auth = require('./backend/middleware/auth');
 
 const app = express();
 
