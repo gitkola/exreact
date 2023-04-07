@@ -7,7 +7,7 @@
     "node": "14.x"
   },
   "scripts": {
-    "start": "cd frontend && npm install && npm run build && cd ../ && node ./backend/index.js",
+    "start": "node ./backend/index.js",
     "dev": "nodemon backend/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
