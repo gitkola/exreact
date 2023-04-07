@@ -12,5 +12,5 @@
       "dest": "/"
     }
   ],
-  "outputDirectory": "frontend/build"
+  "outputDirectory": "./frontend/build"
 }
