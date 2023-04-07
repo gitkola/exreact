@@ -2,7 +2,7 @@
   "version": 2,
   "builds": [
     {
-      "src": "./index.js",
+      "src": "*.js",
       "use": "@vercel/node"
     }
   ],
@@ -12,6 +12,5 @@
       "dest": "/"
     }
   ],
-  "outputDirectory": "./frontend/build",
   "installCommand": "npm install && cd ./frontend && npm install"
 }
